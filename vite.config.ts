@@ -15,4 +15,11 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  tests: {
+    globals: true,
+    environment: 'jsdom',
+    server: {
+      deps: { inline: ['vuetify'] }
+    }
+  }
 })
