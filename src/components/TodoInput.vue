@@ -17,18 +17,20 @@ const handleAddTodo = () => {
 </script>
 
 <template>
-  <v-container class="todo-inputs flex">
+  <v-container class="todo-inputs flex" data-testid="todo-input-container">
     <h2>Add a new todo item</h2>
     <div>
       <v-text-field
         v-model="newTodo.title"
         label="title"
+        data-testid="todo-input-title"
       />
       <v-text-field 
         v-model="newTodo.description" 
         label="description"
+        data-testid="todo-input-description"
       />
-      <v-btn @click="handleAddTodo">Create Todo</v-btn>
+      <v-btn @click="handleAddTodo" data-testid="todo-create-btn">Create Todo</v-btn>
     </div>
   </v-container>
 </template>

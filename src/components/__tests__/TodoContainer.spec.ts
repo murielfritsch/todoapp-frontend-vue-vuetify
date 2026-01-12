@@ -63,7 +63,7 @@ describe('TodoContainer.vue', () => {
 
     await wrapper.vm.$nextTick()
 
-    expect(todoApi.getTodos).toHaveBeenCalled()
+    expect(todoApi.getTodos).toHaveBeenCalledTimes(1)
   })
 
   it('handles addTodo event', async () => {
@@ -85,6 +85,9 @@ describe('TodoContainer.vue', () => {
     const todoInput = wrapper.findComponent({ name: 'TodoInput' })
     if (todoInput.exists()) {
       await todoInput.vm.$emit('add-todo', { title: 'New Todo', description: 'Test' })
+      await wrapper.vm.$nextTick()
+      expect(todoApi.createTodo).toHaveBeenCalledWith({ title: 'New Todo', description: 'Test' })
+      expect(todoApi.getTodos).toHaveBeenCalled()
     }
   })
 
@@ -107,6 +110,9 @@ describe('TodoContainer.vue', () => {
     const todoList = wrapper.findComponent({ name: 'TodoList' })
     if (todoList.exists()) {
       await todoList.vm.$emit('toggle-todo', 1)
+      await wrapper.vm.$nextTick()
+      expect(todoApi.updateTodo).toHaveBeenCalledWith(1)
+      expect(todoApi.getTodos).toHaveBeenCalled()
     }
   })
 
@@ -129,6 +135,9 @@ describe('TodoContainer.vue', () => {
     const todoList = wrapper.findComponent({ name: 'TodoList' })
     if (todoList.exists()) {
       await todoList.vm.$emit('delete-todo', 1)
+      await wrapper.vm.$nextTick()
+      expect(todoApi.deleteTodo).toHaveBeenCalledWith(1)
+      expect(todoApi.getTodos).toHaveBeenCalled()
     }
   })
 
@@ -149,12 +158,11 @@ describe('TodoContainer.vue', () => {
     await wrapper.vm.$nextTick()
     vi.clearAllMocks()
 
-    const initialCallCount = vi.mocked(todoApi.getTodos).mock.calls.length
-    
     const todoInput = wrapper.findComponent({ name: 'TodoInput' })
     if (todoInput.exists()) {
       await todoInput.vm.$emit('add-todo', { title: 'New Todo', description: 'Test' })
       await wrapper.vm.$nextTick()
+      expect(todoApi.getTodos).toHaveBeenCalled()
     }
   })
 
@@ -191,7 +199,11 @@ describe('TodoContainer.vue', () => {
       }
     })
 
-    // Check initial state should be false after mount completes
+    // Check loading state is true during API call
+    expect(wrapper.vm.loading).toBe(true)
+    
+    // Check loading state is false after API call completes
     await new Promise(resolve => setTimeout(resolve, 150))
+    expect(wrapper.vm.loading).toBe(false)
   })
 })
