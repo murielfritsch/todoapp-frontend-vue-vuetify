@@ -13,6 +13,9 @@ This is the frontend part.
 npm install
 ```
 
+Add the backend url to a .env file following the .example.env file example. 
+
+
 ### Compile and Hot-Reload for Development
 
 ```sh
